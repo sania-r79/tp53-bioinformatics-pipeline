@@ -2,18 +2,18 @@
 
 ## Introduction
 
-TP53 is the tumour suppressor gene, one of the most frequently studied genes in cancer biology. It encodes a transcription factor that regulates the cell cycle and triggers apoptosis in response to DNA damage, making it central to maintaining genomic stability. Mutations in TP53 are found across a wide range of human cancers, making it one of the most important genes in oncology research. This project explores TP53's sequence characteristics and connects those findings to current research literature via an automated pipeline.
+TP53 is the tumour suppressor gene, one of the most frequently studied genes in cancer biology. It encodes a transcription factor that regulates the cell cycle and triggers apoptosis (cell death) in response to DNA damage, making it central to maintaining genomic stability. Mutations in TP53 are found across a wide range of human cancers, making it one of the most important genes in oncology research. This project explores TP53's sequence characteristics and connects those findings to current research literature via an automated pipeline.
 
 ## Methods
 
 The pipeline was built in Python using BioPython for sequence handling and the NCBI Entrez API for literature retrieval. It runs in four stages:
 
-1. **Load sequence** — reads the TP53 FASTA file (NM_000546.6)
-2. **Extract features** — calculates GC content across a sliding window (window size 100 bp, step size 50 bp) and identifies all Open Reading Frames (ORFs) across three forward reading frames
-3. **Fetch interpretation** — searches PubMed for TP53-related abstracts and summarizes them using the OpenAI API (gpt-4o-mini)
-4. **Generate report** — compiles sequence metrics, ORF annotations, and the AI-generated interpretation into a single output file
+1. **Loading sequence**: reads the TP53 FASTA file (NM_000546.6)
+2. **Extract features**: calculates GC content across a sliding window (window size 100 bp, step size 50 bp) and identifies all Open Reading Frames (ORFs) across three forward reading frames
+3. **Fetch interpretation**: searches PubMed for TP53-related abstracts and summarizes them using the OpenAI API (gpt-4o-mini)
+4. **Generate report**: compiles sequence descriptions, ORF annotations, and the AI-generated interpretation into a single output file
 
-**Tools used:** Python 3.x, BioPython, NCBI Entrez API, OpenAI API (gpt-4o-mini)
+**Tools used:** Python 3.14.5, BioPython, NCBI Entrez API, OpenAI API (gpt-4o-mini)
 
 ## Results
 
@@ -52,13 +52,12 @@ Applications discussed included genomic profiling for personalized endometrial c
 
 Structurally, TP53's longest identified ORF (1182 bp) accounts for nearly 47% of the total 2512 bp sequence, consistent with TP53 containing a substantial coding region relative to its overall gene length. The moderately high GC content (53.38%) falls within the expected range for human coding sequences.
 
-On the literature side, only one of the five retrieved abstracts (the lung adenocarcinoma / tobacco exposure study) discussed TP53 directly as a subject of investigation — the remaining four were only tangentially connected, either through shared pathways (e.g. the p53 apoptosis pathway in the fibrosarcoma study) or unrelated diseases that happened to mention TP53 in passing. This suggests that a single-keyword PubMed search for "TP53" is broad enough to surface abstracts where the gene is mentioned but not the central focus, rather than literature specifically characterizing TP53's own biology.
-
+On the literature side, only one of the five retrieved abstracts (the lung adenocarcinoma / tobacco exposure study) discussed TP53 directly as a subject of investigation. The remaining four were only partially connected, either through shared pathways (e.g. the p53 apoptosis pathway in the fibrosarcoma study) or unrelated diseases that happened to mention TP53 briefly. This suggests that a single-keyword PubMed search for "TP53" is broad enough to also include abstracts where the gene is mentioned but not the central focus. 
 ## What I Learned
 
-Working through this pipeline reinforced how the specificity of a search query directly affects the relevance of downstream AI interpretation — a broad search term can return abstracts that are only loosely related to the target gene, which then get summarized as though they were core findings. A more targeted search (for example, using PubMed field tags like `TP53[Title]` or adding qualifiers such as "TP53 AND (mutation OR tumor suppressor)") would likely produce abstracts more directly focused on TP53 itself.
+Working through this pipeline reinforced how the specificity of a search query directly affects the relevance of downstream AI interpretation. A broad search term can return abstracts that are only loosely related to the target gene, which then get summarized as though they were core findings. A more targeted search (for example, using PubMed field tags like "TP53[Title]" or adding qualifiers such as "TP53 AND (mutation OR tumor suppressor)") would likely produce abstracts more specific to TP53 itself.
 
-I also worked through several environment and debugging challenges over the course of this project: installing packages correctly via pip versus mistakenly running commands inside the Python interactive shell, handling OpenAI API billing and rate limits, keeping API keys out of version control using a separate `api_key.txt` file and `.gitignore`, and structuring a multi-file script into a single runnable pipeline. These troubleshooting steps were as valuable to the learning process as the bioinformatics content itself.
+I also worked through several environment and debugging challenges over the course of this project: installing packages correctly via pip versus mistakenly running commands inside the Python interactive shell, handling OpenAI API billing and rate limits, keeping API keys out of version control using a separate "api_key.txt" file and structuring scripts that work within individual files into a single runnable pipeline. These troubleshooting steps were as valuable to the learning process as the bioinformatics content itself.
 
 ## Appendix
 
